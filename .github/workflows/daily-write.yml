@@ -1,0 +1,49 @@
+name: Daily Update
+
+# 设定每天运行一次；这段 cron 表示 UTC 时间每天 00:00（对应北京时间 08:00）
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+# 默认 GITHUB_TOKEN 拥有写入 contents 的权限，
+# 如果你的仓库做了更严格的权限限制，可能还要额外声明：
+permissions:
+  contents: write
+jobs:
+  update-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 签出仓库代码，persist-credentials: true 会让后续 git push 使用 GITHUB_TOKEN
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0          # 拉取完整历史，否则 commit 有时会出问题
+          persist-credentials: true
+
+      # 2. 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. 安装依赖（如有 package.json）
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 运行你的脚本
+      - name: Run update script
+        run: node dist/index.mjs
+
+      # 5. 配置 Git 用户信息
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      # 6. 将修改提交并推送
+      - name: Commit & Push changes
+        run: |
+          git add .
+          git diff --cached --quiet || git commit -m "chore: daily update nodes"
+          git push
