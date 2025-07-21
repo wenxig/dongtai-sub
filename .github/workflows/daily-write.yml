@@ -1,49 +1,51 @@
-name: Daily Update
+name: Wiki Fetch & Update
 
-# 设定每天运行一次；这段 cron 表示 UTC 时间每天 00:00（对应北京时间 08:00）
 on:
+  # 定时三次：本地 08:00 / 12:00 / 20:00
   schedule:
     - cron: '0 0 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 12 * * *'
 
-# 默认 GITHUB_TOKEN 拥有写入 contents 的权限，
-# 如果你的仓库做了更严格的权限限制，可能还要额外声明：
+  # 用户 push 触发，排除脚本写入的 data 目录
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'data/**'
+
 permissions:
   contents: write
+
 jobs:
-  update-files:
+  fetch-wiki:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 签出仓库代码，persist-credentials: true 会让后续 git push 使用 GITHUB_TOKEN
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0          # 拉取完整历史，否则 commit 有时会出问题
+          fetch-depth: 0
           persist-credentials: true
 
-      # 2. 安装 Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '18'
 
-      # 3. 安装依赖（如有 package.json）
       - name: Install dependencies
         run: npm ci
 
-      # 4. 运行你的脚本
-      - name: Run update script
+      - name: Fetch and extract Wiki pages
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
         run: node dist/index.mjs
 
-      # 5. 配置 Git 用户信息
-      - name: Configure Git
+      - name: Commit & Push generated files
+        if: ${{ github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      # 6. 将修改提交并推送
-      - name: Commit & Push changes
-        run: |
-          git add .
-          git diff --cached --quiet || git commit -m "chore: daily update nodes"
+          git add data/*.txt
+          git diff --cached --quiet || git commit -m "chore: wiki update [skip ci]"
           git push
