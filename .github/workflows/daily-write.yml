@@ -33,8 +33,15 @@ jobs:
         with:
           node-version: '18'
 
+       # 安装 pnpm CLI
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10   # 或你需要的 pnpm 版本
+
+      # 用 pnpm 安装依赖
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Fetch and extract Wiki pages
         env:

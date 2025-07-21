@@ -25,9 +25,9 @@ coverage
 *.sln
 *.sw?
 
-package-lock.json
-pnpm-lock.yaml
 components.d.ts
 .vercel
 
 .wrangler
+
+data
