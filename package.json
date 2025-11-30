@@ -10,6 +10,7 @@
   "devDependencies": {
     "@liuli-util/vite-plugin-node": "^0.10.0",
     "@rollup/plugin-node-resolve": "latest",
+    "@types/jsdom": "^27.0.0",
     "@types/node": "latest",
     "typescript": "^5.8.3",
     "vite": "npm:rolldown-vite@latest"
@@ -19,5 +20,8 @@
       "vite": "npm:rolldown-vite@latest"
     },
     "onlyBuiltDependencies": []
+  },
+  "dependencies": {
+    "jsdom": "^27.2.0"
   }
 }

@@ -1,10 +1,10 @@
 import { writeFile, mkdir } from 'fs/promises'
 import path from 'path'
-
+import { JSDOM } from "jsdom"
 async function fetchAndWrite() {
   // 1. 从网络获取内容
   console.log('begin get')
-  const url = 'https://raw.githubusercontent.com/wiki/Alvin9999/new-pac/v2ray%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7.md' // <- 替换成你的数据源 URL
+  const url = 'https://github.com/Alvin9999/new-pac/wiki/v2ray%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7'
   const res = await fetch(url, {
     method: 'GET',
   })
@@ -12,10 +12,10 @@ async function fetchAndWrite() {
   if (!res.ok) {
     throw new Error(`请求失败：${res.status} ${res.statusText}`)
   }
-  const md = await res.text()
-  const text = [...md.matchAll(/(?<=```bash\s*\n)([\s\S]*?)(?=\n```)/mg)].join('\n')
+  const { document } = (new JSDOM(await res.text())).window
+  const text = Array.from(document.querySelectorAll<HTMLDivElement>('.highlight-source-shell')).map(v => v.textContent).join('\n')
   console.log('body done', text)
-  
+
 
   // 2. 确保输出目录存在
   const outDir = path.resolve(process.cwd(), 'data')
