@@ -1,5 +1,5 @@
 vless://efbccc49-b2dc-4cb7-984c-b5760161b6de@212.129.2.4:44550?encryption=none&security=reality&sni=www.sky.com&fp=chrome&pbk=mjVYzIq4FDWiPFYOwed0GPOfU8tGOM9mypXfzlsVa3g&sid=6a9c00fcfa96aab1&spx=%2F&type=xhttp&path=%2Fgithub.com%2FAlvin9999#VLESS%E8%8A%82%E7%82%B91-xhttp-reality
 vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIlZNRVNT6IqC54K5Mi1pcHY2IiwNCiAgImFkZCI6ICIyMDAxOmJjODozMmQ3OjEzYTo6MiIsDQogICJwb3J0IjogIjU1MDA5IiwNCiAgImlkIjogIjA5M2UyOTQ2LWFhMTYtNDkyYS1hMTM5LTRjNjAzOGFkM2UxYyIsDQogICJhaWQiOiAiMCIsDQogICJzY3kiOiAiYXV0byIsDQogICJuZXQiOiAid3MiLA0KICAidHlwZSI6ICJub25lIiwNCiAgImhvc3QiOiAid3d3LmJpbmcuY29tIiwNCiAgInBhdGgiOiAiL2dpdGh1Yi5jb20vQWx2aW45OTk5IiwNCiAgInRscyI6ICIiLA0KICAic25pIjogIiIsDQogICJhbHBuIjogIiIsDQogICJmcCI6ICIiDQp9
-hysteria2://dongtaiwang.com@62.210.99.49:22880?sni=apple.com&alpn=h3&insecure=1#Hysteria2%E8%8A%82%E7%82%B93
+hysteria2://dongtaiwang.com@62.210.99.49:40088?sni=apple.com&alpn=h3&insecure=1#Hysteria2%E8%8A%82%E7%82%B93
 ssr://c3NyMi43NjI5ODgueHl6OjMzMzM2OmF1dGhfY2hhaW5fYTpjaGFjaGEyMC1pZXRmOnRsczEuMl90aWNrZXRfYXV0aDpaRzl1WjNSaGFYZGhibWN1WTI5dC8_b2Jmc3BhcmFtPSZyZW1hcmtzPVUxTlM2SXFDNTRLNQ
 ss://YWVzLTI1Ni1nY206ZG9uZ3RhaXdhbmcuY29t@[2001:bc8:1203:106::300]:33333#SS%E8%8A%82%E7%82%B9-ipv6
