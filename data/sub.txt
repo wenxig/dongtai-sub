@@ -1,5 +1,5 @@
 vless://3fb38b37-c636-44d3-ab0c-897fab438bf1@62.210.8.152:18877?encryption=none&security=reality&sni=mxj.myanimelist.net&fp=chrome&pbk=DZj1qrLAm6EJfPkVRPpSCgoQN8sM8Rbio0jpsS1A3FM&sid=288132e297984d34&spx=%2F&type=xhttp&path=%2Fgithub.com%2FAlvin9999#VLESS%E8%8A%82%E7%82%B91-xhttp-reality
 vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogIlZNRVNT6IqC54K5Mi1pcHY2IiwNCiAgImFkZCI6ICIyMDAxOmJjODozMmQ3OjIwMTM6OjgiLA0KICAicG9ydCI6ICI2MjIxMSIsDQogICJpZCI6ICJlMTc4NmQ0OS1jY2JhLTQ2NmItYTBkZC1lMWFiNTliZDgzYmIiLA0KICAiYWlkIjogIjAiLA0KICAic2N5IjogImF1dG8iLA0KICAibmV0IjogIndzIiwNCiAgInR5cGUiOiAibm9uZSIsDQogICJob3N0IjogInd3dy5iaW5nLmNvbSIsDQogICJwYXRoIjogIi9naXRodWIuY29tL0FsdmluOTk5OSIsDQogICJ0bHMiOiAiIiwNCiAgInNuaSI6ICIiLA0KICAiYWxwbiI6ICIiLA0KICAiZnAiOiAiIg0KfQ==
-hysteria2://dongtaiwang.com@62.210.99.49:40088?sni=apple.com&alpn=h3&insecure=1#Hysteria2%E8%8A%82%E7%82%B93
+hysteria2://dongtaiwang.com@[2001:bc8:32d7:234::5]:40088?sni=apple.com&alpn=h3&insecure=1#Hysteria2%E8%8A%82%E7%82%B93
 ssr://c3NyMi43NjI5ODgueHl6OjMzMzM2OmF1dGhfY2hhaW5fYTpjaGFjaGEyMC1pZXRmOnRsczEuMl90aWNrZXRfYXV0aDpaRzl1WjNSaGFYZGhibWN1WTI5dC8_b2Jmc3BhcmFtPSZyZW1hcmtzPVUxTlM2SXFDNTRLNQ
 ss://YWVzLTI1Ni1nY206ZG9uZ3RhaXdhbmcuY29t@[2001:bc8:32d7:2013::10]:11111#SS%E8%8A%82%E7%82%B9-ipv6
