@@ -12,3 +12,9 @@
 ```sh
 https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.txt
 ```
+
+## 诶 🤓 :point_up:
+
+有了好的节点，该看什么内容呢？当然是**Delta Comic**了，包罗万象的内容，人性化的内容，你的夜晚好助手
+
+[![Readme Card](https://github-readme-stats.vercel.app/api/pin/?username=wenxig&repo=delta-comic)](https://github.com/wenxig/delta-comic)
