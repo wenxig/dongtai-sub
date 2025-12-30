@@ -15,7 +15,7 @@ https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.tx
 
 ## 诶 🤓 :point_up:
 
-有了好的节点，该看什么内容呢？当然是**Delta Comic**了，包罗万象的内容，人性化的内容，你的夜晚好助手
+有了好的节点，该看什么内容呢？当然是**Delta Comic**了，包罗万象的内容，人性化的界面，你的夜晚好助手
 
 [![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=delta-comic&theme=transparent)](https://github.com/wenxig/delta-comic)
 
