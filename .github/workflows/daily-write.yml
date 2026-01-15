@@ -3,11 +3,7 @@ name: Wiki Fetch & Update
 on:
   # 定时三次：本地 08:00 / 12:00 / 20:00
   schedule:
-    - cron: '0 0 * * *'
-    - cron: '0 4 * * *'
-    - cron: '0 12 * * *'
-    - cron: '0 16 * * *'
-    - cron: '0 20 * * *'
+    - cron: '*/20 * * * *'
 
   # 用户 push 触发，排除脚本写入的 data 目录
   push:
@@ -15,6 +11,9 @@ on:
       - main
     paths-ignore:
       - 'data/**'
+      - 'README.md'
+      
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -30,16 +29,17 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '23'
-
        # 安装 pnpm CLI
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 10   # 或你需要的 pnpm 版本
+          version: 26   # 或你需要的 pnpm 版本
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '23'
+          cache: "pnpm"
 
       # 用 pnpm 安装依赖
       - name: Install dependencies
@@ -53,11 +53,25 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: node dist/index.mjs
 
+      # 新增：更新 README 时间戳并清理旧日志
+      - name: Update README Timestamp
+        run: |
+          # 设置时区为东八区（北京时间）
+          export TZ='Asia/Shanghai'
+          CURRENT_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          
+          # 1. 使用 sed 删除 README.md 中所有包含 "更新于" 的行（清理旧日志）
+          # 2. 使用 printf 确保文件末尾有换行符并添加新内容
+          sed -i '/更新于/d' README.md
+          echo -e "\n更新于 $CURRENT_TIME" >> README.md
+
       - name: Commit & Push generated files
+        # 只有在 main 分支且不是由 bot 触发时执行，避免死循环
         if: ${{ github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add .
-          git diff --cached --quiet || git commit -m "chore: wiki update [skip ci]"
+          # 检查是否有文件变化，如果有则提交
+          git diff --cached --quiet || git commit -m "chore: wiki update & readme timestamp [skip ci]"
           git push
