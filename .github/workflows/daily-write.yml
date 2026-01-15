@@ -74,4 +74,4 @@ jobs:
           git add .
           # 检查是否有文件变化，如果有则提交
           git diff --cached --quiet || git commit -m "chore: wiki update & readme timestamp [skip ci]"
-          git push
+          git push -f
