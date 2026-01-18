@@ -1,9 +1,8 @@
 name: Wiki Fetch & Update
 
 on:
-  # 定时三次：本地 08:00 / 12:00 / 20:00
   schedule:
-    - cron: '*/20 * * * *'
+    - cron: '0 */1 * * *'
 
   # 用户 push 触发，排除脚本写入的 data 目录
   push:
