@@ -56,10 +56,8 @@ jobs:
           export TZ='Asia/Shanghai'
           CURRENT_TIME=$(date "+%Y-%m-%d %H:%M:%S")
           
-          # 1. 使用 sed 删除 README.md 中所有包含 "更新于" 的行（清理旧日志）
-          # 2. 使用 printf 确保文件末尾有换行符并添加新内容
           sed -i '/更新于/d' README.md
-          echo -e "\n更新于 $CURRENT_TIME" >> README.md
+          echo -e "更新于 $CURRENT_TIME" >> README.md
 
       - name: Commit & Push generated files
         if: ${{ github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]' }}
