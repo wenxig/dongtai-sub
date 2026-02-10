@@ -11,7 +11,7 @@ const _: SourceGetter = async () => {
   const { document } = new JSDOM(await res.text()).window
   return Array.from(
     document.querySelectorAll<HTMLDivElement>('.highlight-source-shell, .highlight-source-txt')
-  ).map(v => v.textContent.replaceAll('#', '#' + encodeURI('[group:v2ray] ')))
+  ).map(v => v.textContent.replaceAll('#', '#' + encodeURI('group->v2ray ')))
 }
 
 export default _
