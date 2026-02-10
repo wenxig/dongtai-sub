@@ -23,34 +23,31 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: true
 
-       # 安装 pnpm CLI
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
-          version: 10.26.0    
+          version: 10.28.0    
           
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '23'
+          node-version: '25'
           cache: "pnpm"
 
-      # 用 pnpm 安装依赖
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm run build
+      - name: Prepare
+        run: |
+          pnpm install
+          pnpm build
         
       - name: Fetch and extract Wiki pages
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: node dist/index.mjs
+        run: pnpm begin
 
       # 新增：更新 README 时间戳并清理旧日志
       - name: Update README Timestamp
@@ -65,7 +62,6 @@ jobs:
           echo -e "\n更新于 $CURRENT_TIME" >> README.md
 
       - name: Commit & Push generated files
-        # 只有在 main 分支且不是由 bot 触发时执行，避免死循环
         if: ${{ github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]' }}
         run: |
           git config user.name "github-actions[bot]"
@@ -73,4 +69,4 @@ jobs:
           git add .
           # 检查是否有文件变化，如果有则提交
           git diff --cached --quiet || git commit -m "chore: wiki update & readme timestamp [skip ci]"
-          git push -f
+          git push
