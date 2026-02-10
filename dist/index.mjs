@@ -32,7 +32,7 @@ const _$1 = async () => {
 	const res = await fetch("https://github.com/Alvin9999-newpac/fanqiang/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7", { method: "GET" });
 	if (!res.ok) throw new Error(`fail to fetch: ${res.status} ${res.statusText}`);
 	const { document } = new JSDOM(await res.text()).window;
-	return Array.from(document.querySelectorAll(".highlight-source-shell, .highlight-source-txt")).map((v) => v.textContent);
+	return Array.from(document.querySelectorAll(".highlight-source-shell, .highlight-source-txt")).map((v) => v.textContent.replaceAll("#", "#" + encodeURI("[group:ss] ")));
 };
 
 //#endregion
@@ -41,7 +41,7 @@ const _ = async () => {
 	const res = await fetch("https://github.com/Alvin9999-newpac/fanqiang/wiki/v2ray%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7", { method: "GET" });
 	if (!res.ok) throw new Error(`fail to fetch: ${res.status} ${res.statusText}`);
 	const { document } = new JSDOM(await res.text()).window;
-	return Array.from(document.querySelectorAll(".highlight-source-shell, .highlight-source-txt")).map((v) => v.textContent);
+	return Array.from(document.querySelectorAll(".highlight-source-shell, .highlight-source-txt")).map((v) => v.textContent.replaceAll("#", "#" + encodeURI("[group:v2ray] ")));
 };
 
 //#endregion
