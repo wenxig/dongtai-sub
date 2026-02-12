@@ -10,12 +10,9 @@
   "devDependencies": {
     "@types/jsdom": "^27.0.0",
     "@types/node": "latest",
-    "oxfmt": "^0.28.0",
-    "oxlint": "^1.43.0",
     "tsdown": "^0.20.3"
   },
   "dependencies": {
-    "jsdom": "^28.0.0",
-    "yaml": "^2.8.2"
+    "jsdom": "^28.0.0"
   }
 }

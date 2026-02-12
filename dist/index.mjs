@@ -2,7 +2,6 @@ import { mkdir } from "fs/promises";
 import path from "path";
 import { writeFile } from "node:fs/promises";
 import path$1 from "node:path";
-import { stringify } from "yaml";
 import { JSDOM } from "jsdom";
 
 //#region src/output/v2ray.ts
@@ -13,13 +12,7 @@ const _$3 = async (subs, dir) => {
 //#endregion
 //#region src/output/clash.ts
 const _$2 = async (subs, dir) => {
-	await writeFile(path$1.join(dir, "clash.txt"), stringify({ proxies: subs.map((sub) => {
-		return {
-			name: sub,
-			type: sub.split(":", 1)[0] ?? "unknown",
-			url: sub
-		};
-	}) }), "utf8");
+	await writeFile(path$1.join(dir, "clash.txt"), Buffer.from(subs.join("\n")).toString("base64"), "utf8");
 };
 
 //#endregion
