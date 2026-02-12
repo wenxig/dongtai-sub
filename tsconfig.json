@@ -23,13 +23,12 @@
     "noImplicitOverride": true,
     "noImplicitThis": true,
     "types": [
+      "node",
       "@types/node"
-    ],
-    
+    ]
   },
   "include": [
     "./*",
     "./**/*"
-  ],
-  
+  ]
 }

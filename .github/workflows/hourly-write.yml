@@ -39,6 +39,9 @@ jobs:
           node-version: '25'
           cache: "pnpm"
 
+      - name: Install Node.js types
+        run: npm install --save-dev @types/node
+
       - name: Prepare
         run: |
           pnpm install
@@ -48,6 +51,12 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: pnpm begin
+
+      - name: Generate Mihomo YAML
+        run: |
+          pnpm begin
+          ls -l data
+          cat data/sub.yaml || echo 'sub.yaml not generated'
 
       # 新增：更新 README 时间戳并清理旧日志
       - name: Update README Timestamp
@@ -60,7 +69,8 @@ jobs:
           echo -e "更新于 $CURRENT_TIME" >> README.md
 
       - name: Commit & Push generated files
-        if: ${{ github.ref == 'refs/heads/main' && github.actor != 'github-actions[bot]' }}
+        # 只要不是bot递归触发都允许推送
+        if: ${{ github.actor != 'github-actions[bot]' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -68,3 +78,4 @@ jobs:
           # 检查是否有文件变化，如果有则提交
           git diff --cached --quiet || git commit -m "chore: wiki update & readme timestamp [skip ci]"
           git push
+
