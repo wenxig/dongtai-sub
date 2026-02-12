@@ -40,7 +40,7 @@ jobs:
           cache: "pnpm"
 
       - name: Install Node.js types
-        run: npm install --save-dev @types/node
+        run: pnpm install --no-frozen-lockfile
 
       - name: Prepare
         run: |
