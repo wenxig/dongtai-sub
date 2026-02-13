@@ -30,7 +30,7 @@ function parseSS(url, idx) {
 		const [_, base64, nameRaw] = base64Match;
 		let decoded = "";
 		try {
-			decoded = Buffer$1.from(base64.split("?")[0], "base64").toString();
+			decoded = Buffer$1.from(base64.split("@")[0].split("?")[0], "base64").toString();
 		} catch {}
 		const m = decoded.match(/([^:]+):([^@]+)@([^:]+):(\d+)/);
 		if (m) {
