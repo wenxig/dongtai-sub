@@ -88,7 +88,8 @@ function parseVLESS(url: string, idx: number) {
   if (query) {
     query.split('&').forEach(kv => {
       const [k, v] = kv.split('=');
-      params[k] = v;
+      // 忽略type参数，防止xhttp污染type字段
+      if (k !== 'type') params[k] = v;
     });
   }
   const name = nameRaw ? `[VLESS] ${decodeURIComponent(nameRaw)}` : `vless-${idx}`;
