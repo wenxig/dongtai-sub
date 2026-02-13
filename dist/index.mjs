@@ -94,7 +94,7 @@ function parseVLESS(url, idx) {
 	const params = {};
 	if (query) query.split("&").forEach((kv) => {
 		const [k, v] = kv.split("=");
-		params[k] = v;
+		if (k !== "type") params[k] = v;
 	});
 	return {
 		name: nameRaw ? `[VLESS] ${decodeURIComponent(nameRaw)}` : `vless-${idx}`,

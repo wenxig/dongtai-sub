@@ -28,7 +28,7 @@ proxies:
   - name: '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
     server: 157.254.223.64
     port: 23000
-    type: xhttp
+    type: vless
     uuid: bcb13ecb-4f63-4257-ae01-ec5aeaa613a5
     skip-cert-verify: true
     encryption: none
