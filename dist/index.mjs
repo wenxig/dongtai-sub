@@ -3,6 +3,7 @@ import path from "path";
 import { writeFile } from "node:fs/promises";
 import path$1 from "node:path";
 import fs from "fs";
+import yaml from "js-yaml";
 import { Buffer as Buffer$1 } from "buffer";
 import { JSDOM } from "jsdom";
 
@@ -153,28 +154,33 @@ function parseProxy(line, idx) {
 		url: line
 	};
 }
-function genProxiesYaml(subs) {
-	return subs.map((line, idx) => {
-		const obj = parseProxy(line, idx);
-		if (!obj) return `  name: unknown-${idx}\n  type: unknown\n  url: ${line}`;
-		return Object.entries(obj).map(([k, v]) => `  ${k}: ${v}`).join("\n");
-	}).join("\n-\n");
+function genProxiesArr(subs) {
+	return subs.map((line, idx) => parseProxy(line, idx)).filter(Boolean);
 }
 const mihomo = async (subs, dir) => {
 	const outPath = path.join(dir, "sub.yaml");
 	let template = getTemplateYaml();
-	const proxiesYaml = genProxiesYaml(subs);
-	template = template.replace(/proxies:\s*\n/, `proxies:\n-\n${proxiesYaml}\n`);
-	const proxyNames = subs.map((line, idx) => {
-		const obj = parseProxy(line, idx);
-		return obj && obj.name ? obj.name : `unknown-${idx}`;
-	});
-	template = template.replace(/proxies:\n([\s\S]*?)proxy-groups:/, `proxies:\n-\n${proxiesYaml}\nproxy-groups:`);
-	template = template.replace(/proxies:\n([\s\S]*?)rules:/, () => {
-		const autoGroup = `  - name: 自动选择\n    type: url-test\n    url: http://www.gstatic.com/generate_204\n    interval: 300\n    tolerance: 50\n    proxies:\n${proxyNames.map((n) => `      - ${n}`).join("\n")}`;
-		return `proxies:\n-\n${proxiesYaml}\nproxy-groups:\n${`  - name: 节点选择\n    type: select\n    proxies:\n${proxyNames.map((n) => `      - ${n}`).join("\n")}\n      - 自动选择\n      - DIRECT`}\n\n${autoGroup}\n\nrules:`;
-	});
-	fs.writeFileSync(outPath, template, "utf8");
+	const doc = yaml.load(template);
+	const proxiesArr = genProxiesArr(subs);
+	doc.proxies = proxiesArr;
+	const proxyNames = proxiesArr.map((p) => p.name);
+	doc["proxy-groups"] = [{
+		name: "节点选择",
+		type: "select",
+		proxies: [
+			...proxyNames,
+			"自动选择",
+			"DIRECT"
+		]
+	}, {
+		name: "自动选择",
+		type: "url-test",
+		url: "http://www.gstatic.com/generate_204",
+		interval: 300,
+		tolerance: 50,
+		proxies: proxyNames
+	}];
+	fs.writeFileSync(outPath, yaml.dump(doc), "utf8");
 };
 
 //#endregion
