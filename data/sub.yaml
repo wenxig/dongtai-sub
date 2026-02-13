@@ -25,12 +25,12 @@ dns:
     ipcidr:
       - 240.0.0.0/4
 proxies:
-  - name: vless-0
-    type: xhttp
+  - name: '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
     server: 157.254.223.64
-    port: >-
-      23000?encryption=none&security=reality&sni=mxj.myanimelist.net&fp=chrome&pbk=dJFLqPCinyadJxJk7zA_DwBOEAvexvm7AZT2Pw84_EY&sid=955275866feece09&spx=%2F&type=xhttp&path=%2Falvin9999.com#group-%3Ev2ray%20VLESS%E8%8A%82%E7%82%B91-xhttp-reality
+    port: 23000
+    type: xhttp
     uuid: bcb13ecb-4f63-4257-ae01-ec5aeaa613a5
+    skip-cert-verify: true
     encryption: none
     security: reality
     sni: mxj.myanimelist.net
@@ -38,49 +38,45 @@ proxies:
     pbk: dJFLqPCinyadJxJk7zA_DwBOEAvexvm7AZT2Pw84_EY
     sid: 955275866feece09
     spx: '%2F'
-    path: '%2Falvin9999.com#group-%3Ev2ray%20VLESS%E8%8A%82%E7%82%B91-xhttp-reality'
-  - name: vmess-1
-    type: vmess
+    path: '%2Falvin9999.com'
+  - name: '[Vmess] VMESS节点2-ipv6'
     server: 2a14:7584:d0a2::a
-    port: '23456'
+    port: 23456
+    type: vmess
     uuid: bd48e0ac-e90e-4451-a4f2-abf061cfb890
     alterId: '0'
     cipher: auto
     tls: false
+    skip-cert-verify: true
     network: ws
-    ws-path: /alvin9999.com
-    ws-headers:
-      Host: www.bing.com
-  - name: hysteria2-2
+    ws-opts:
+      path: /alvin9999.com
+      headers:
+        Host: www.bing.com
+  - name: '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+    server: '[2a14:7584:d04a::a]'
+    port: 50022
     type: hysteria2
-    server: '[2a14'
-    port: '7584'
+    password: dongtaiwang.com
+    auth: dongtaiwang.com
+    skip-cert-verify: true
     sni: apple.com
-    alpn: h3
-    insecure: 1#group-%3Ev2ray%20Hysteria2%E8%8A%82%E7%82%B93-ipv6
-  - name: ssr-3
-    type: ssr
-    server: ssr2.762988.xyz
-    port: '33336'
-    protocol: auth_chain_a
-    cipher: chacha20-ietf
-    obfs: tls1.2_ticket_auth
-    password: ZG9uZ3RhaXdhbmcuY29t/?obfsparam=&remarks=U1NS6IqC54K5
-  - name: ss-4
+    alpn:
+      - h3
+    insecure: '1'
+  - name: '[SS] group->ss SS节点-ipv6'
+    server: '[2a14:7584:d0a1::a]'
+    port: 12345
     type: ss
-    server: '[2a14'
-    port: '7584'
     cipher: YWVzLTI1Ni1nY206YWx2aW45OTk5LmNvbQ
-    udp: true
 proxy-groups:
   - name: 节点选择
     type: select
     proxies:
-      - vless-0
-      - vmess-1
-      - hysteria2-2
-      - ssr-3
-      - ss-4
+      - '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
+      - '[Vmess] VMESS节点2-ipv6'
+      - '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+      - '[SS] group->ss SS节点-ipv6'
       - 自动选择
       - DIRECT
   - name: 自动选择
@@ -89,11 +85,10 @@ proxy-groups:
     interval: 300
     tolerance: 50
     proxies:
-      - vless-0
-      - vmess-1
-      - hysteria2-2
-      - ssr-3
-      - ss-4
+      - '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
+      - '[Vmess] VMESS节点2-ipv6'
+      - '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+      - '[SS] group->ss SS节点-ipv6'
 rules:
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
