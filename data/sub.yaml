@@ -1,0 +1,98 @@
+port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+unified-delay: true
+global-client-fingerprint: chrome
+dns:
+  enable: true
+  listen: ':53'
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  default-nameserver:
+    - 223.5.5.5
+    - 8.8.8.8
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fallback:
+    - https://1.0.0.1/dns-query
+    - tls://dns.google
+  fallback-filter:
+    geoip: true
+    geoip-code: CN
+    ipcidr:
+      - 240.0.0.0/4
+proxies:
+  - name: '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
+    server: 157.254.223.64
+    port: 23000
+    type: vless
+    uuid: bcb13ecb-4f63-4257-ae01-ec5aeaa613a5
+    skip-cert-verify: true
+    encryption: none
+    security: reality
+    sni: mxj.myanimelist.net
+    fp: chrome
+    pbk: dJFLqPCinyadJxJk7zA_DwBOEAvexvm7AZT2Pw84_EY
+    sid: 955275866feece09
+    spx: '%2F'
+    path: '%2Falvin9999.com'
+  - name: '[Vmess] VMESS节点2-ipv6'
+    server: 2a14:7584:d0a2::a
+    port: 23456
+    type: vmess
+    uuid: bd48e0ac-e90e-4451-a4f2-abf061cfb890
+    alterId: '0'
+    cipher: auto
+    tls: false
+    skip-cert-verify: true
+    network: ws
+    ws-opts:
+      path: /alvin9999.com
+      headers:
+        Host: www.bing.com
+  - name: '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+    server: '[2a14:7584:d04a::a]'
+    port: 50022
+    type: hysteria2
+    password: dongtaiwang.com
+    auth: dongtaiwang.com
+    skip-cert-verify: true
+    sni: apple.com
+    alpn:
+      - h3
+    insecure: '1'
+  - name: '[SS] group->ss SS节点-ipv6'
+    server: 2a14:7584:d0a1::a
+    port: 12345
+    type: ss
+    cipher: aes-256-gcm
+    password: alvin9999.com
+proxy-groups:
+  - name: 节点选择
+    type: select
+    proxies:
+      - '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
+      - '[Vmess] VMESS节点2-ipv6'
+      - '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+      - '[SS] group->ss SS节点-ipv6'
+      - 自动选择
+      - DIRECT
+  - name: 自动选择
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    tolerance: 50
+    proxies:
+      - '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
+      - '[Vmess] VMESS节点2-ipv6'
+      - '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+      - '[SS] group->ss SS节点-ipv6'
+rules:
+  - DOMAIN,clash.razord.top,DIRECT
+  - DOMAIN,yacd.haishan.me,DIRECT
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,节点选择

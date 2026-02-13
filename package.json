@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsdown --config ./tsdown.config.ts",
-    "begin":"node ./dist/index.mjs",
+    "begin": "node ./dist/index.mjs",
     "dev": "pnpm build && pnpm begin"
   },
   "main": "./src/index.ts",
@@ -13,6 +13,7 @@
     "tsdown": "^0.20.3"
   },
   "dependencies": {
+    "js-yaml": "^4.1.1",
     "jsdom": "^28.0.0"
   }
 }
