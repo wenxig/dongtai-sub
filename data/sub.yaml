@@ -65,7 +65,7 @@ proxies:
       - h3
     insecure: '1'
   - name: '[SS] group->ss SS节点-ipv6'
-    server: '[2a14:7584:d0a1::a]'
+    server: 2a14:7584:d0a1::a
     port: 12345
     type: ss
     cipher: YWVzLTI1Ni1nY206YWx2aW45OTk5LmNvbQ

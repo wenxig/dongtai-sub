@@ -25,13 +25,32 @@ function getTemplateYaml() {
 	return fs.readFileSync(templatePath, "utf8");
 }
 function parseSS(url, idx) {
-	const match = url.match(/^ss:\/\/(.+)@(.+):(\d+)(?:#(.+))?/);
+	const base64Match = url.match(/^ss:\/\/(.+)@(.+):(\d+)(?:#(.+))?/);
+	if (base64Match) {
+		const [_, methodPwd, server, port, nameRaw] = base64Match;
+		const [cipher, password] = methodPwd.split(":");
+		return {
+			name: nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`,
+			server: server.replace(/^\[|\]$/g, ""),
+			port: Number(port),
+			type: "ss",
+			cipher,
+			password
+		};
+	}
+	const match = url.match(/^ss:\/\/(.+?)(?:#(.+))?$/);
 	if (!match) return null;
-	const [_, methodPwd, server, port, nameRaw] = match;
-	const [cipher, password] = methodPwd.split(":");
+	const [__, base64, nameRaw] = match;
+	let decoded = "";
+	try {
+		decoded = Buffer$1.from(base64.split("?")[0], "base64").toString();
+	} catch {}
+	const m = decoded.match(/([^:]+):([^@]+)@([^:]+):(\d+)/);
+	if (!m) return null;
+	const [, cipher, password, server, port] = m;
 	return {
 		name: nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`,
-		server,
+		server: server.replace(/^\[|\]$/g, ""),
 		port: Number(port),
 		type: "ss",
 		cipher,
