@@ -11,12 +11,30 @@ function getTemplateYaml(): string {
 
 function parseSS(url: string, idx: number) {
   // ss://base64 or ss://[method]:[password]@[server]:[port]#name
-  // 1. ss://base64-encoded
-  const base64Match = url.match(/^ss:\/\/(.+)@(.+):(\d+)(?:#(.+))?/);
+  // 1. ss://base64?plugin=xxx#name
+  const base64Match = url.match(/^ss:\/\/(.+?)(?:#(.+))?$/);
   if (base64Match) {
-    // ss://[method]:[password]@[server]:[port]#name
-    const [_, methodPwd, server, port, nameRaw] = base64Match;
-    const [cipher, password] = methodPwd.split(':');
+    const [_, base64, nameRaw] = base64Match;
+    let decoded = '';
+    try { decoded = Buffer.from(base64.split('?')[0], 'base64').toString(); } catch {}
+    const m = decoded.match(/([^:]+):([^@]+)@([^:]+):(\d+)/);
+    if (m) {
+      const [, cipher, password, server, port] = m;
+      const name = nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`;
+      return {
+        name,
+        server: server.replace(/^\[|\]$/g, ''),
+        port: Number(port),
+        type: 'ss',
+        cipher,
+        password
+      };
+    }
+  }
+  // 2. ss://[method]:[password]@[server]:[port]#name
+  const match = url.match(/^ss:\/\/(.+):(.+)@(.+):(\d+)(?:#(.+))?/);
+  if (match) {
+    const [_, cipher, password, server, port, nameRaw] = match;
     const name = nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`;
     return {
       name,
@@ -27,24 +45,7 @@ function parseSS(url: string, idx: number) {
       password
     };
   }
-  // 2. ss://base64?plugin=xxx#name
-  const match = url.match(/^ss:\/\/(.+?)(?:#(.+))?$/);
-  if (!match) return null;
-  const [__, base64, nameRaw] = match;
-  let decoded = '';
-  try { decoded = Buffer.from(base64.split('?')[0], 'base64').toString(); } catch {}
-  const m = decoded.match(/([^:]+):([^@]+)@([^:]+):(\d+)/);
-  if (!m) return null;
-  const [, cipher, password, server, port] = m;
-  const name = nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`;
-  return {
-    name,
-    server: server.replace(/^\[|\]$/g, ''),
-    port: Number(port),
-    type: 'ss',
-    cipher,
-    password
-  };
+  return null;
 }
 
 function parseVMESS(url: string, idx: number) {
