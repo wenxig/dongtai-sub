@@ -64,6 +64,12 @@ proxies:
     alpn:
       - h3
     insecure: '1'
+  - name: '[SS] group->ss SS节点-ipv6'
+    server: 2a14:7584:d0a1::a
+    port: 12345
+    type: ss
+    cipher: aes-256-gcm
+    password: alvin9999.com
 proxy-groups:
   - name: 节点选择
     type: select
@@ -71,6 +77,7 @@ proxy-groups:
       - '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
       - '[Vmess] VMESS节点2-ipv6'
       - '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+      - '[SS] group->ss SS节点-ipv6'
       - 自动选择
       - DIRECT
   - name: 自动选择
@@ -82,6 +89,7 @@ proxy-groups:
       - '[VLESS] group->v2ray VLESS节点1-xhttp-reality'
       - '[Vmess] VMESS节点2-ipv6'
       - '[Hysteria2] group->v2ray Hysteria2节点3-ipv6'
+      - '[SS] group->ss SS节点-ipv6'
 rules:
   - DOMAIN,clash.razord.top,DIRECT
   - DOMAIN,yacd.haishan.me,DIRECT
