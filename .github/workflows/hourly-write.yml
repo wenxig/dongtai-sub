@@ -39,8 +39,8 @@ jobs:
           node-version: '25'
           cache: "pnpm"
 
-      - name: Install Node.js types
-        run: pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile && pnpm add js-yaml
 
       - name: Prepare
         run: |
@@ -54,6 +54,7 @@ jobs:
 
       - name: Generate Mihomo YAML
         run: |
+          pnpm build
           pnpm begin
           ls -l data
           cat data/sub.yaml || echo 'sub.yaml not generated'
