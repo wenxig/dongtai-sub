@@ -96,7 +96,7 @@ function parseVLESS(url: string, idx: number) {
     name,
     server,
     port: Number(port),
-    type: 'vless',
+    type: 'vless', // 强制为vless
     uuid,
     'skip-cert-verify': true,
     ...params
