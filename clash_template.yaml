@@ -10,7 +10,7 @@ dns:
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  default-nameserver: 
+  default-nameserver:
     - 223.5.5.5
     - 8.8.8.8
   nameserver:
@@ -39,7 +39,6 @@ proxy-groups:
     interval: 300
     tolerance: 50
     proxies:
-
 
 rules:
   - DOMAIN,clash.razord.top,DIRECT

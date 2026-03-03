@@ -1,202 +1,221 @@
-import fs from 'fs'
-import path from 'path'
-import yaml from 'js-yaml'
-import type { Generator } from '../model'
 import { Buffer } from 'buffer'
+import path from 'path'
 
-function getTemplateYaml(): string {
-  const templatePath = path.resolve(process.cwd(), 'clash_template.yaml')
-  return fs.readFileSync(templatePath, 'utf8')
+import type { Generator } from '../model'
+
+const templateDocPromise = Bun.file(path.resolve(process.cwd(), 'clash_template.yaml'))
+  .text()
+  .then(text => Bun.YAML.parse(text) as Record<string, any>)
+
+const SS_PREFIX = 'ss://'
+const VMESS_PREFIX = 'vmess://'
+const HYSTERIA2_PREFIX = 'hysteria2://'
+const VLESS_PREFIX = 'vless://'
+const TROJAN_PREFIX = 'trojan://'
+
+function parseQuery(
+  query: string,
+  params: Record<string, any>,
+  opts?: { skipType?: boolean; alpnAsArray?: boolean }
+) {
+  let start = 0
+  while (start < query.length) {
+    let amp = query.indexOf('&', start)
+    if (amp === -1) amp = query.length
+    const pair = query.slice(start, amp)
+    const eq = pair.indexOf('=')
+    const key = eq === -1 ? pair : pair.slice(0, eq)
+    if (key && (!opts?.skipType || key !== 'type')) {
+      const value = eq === -1 ? '' : pair.slice(eq + 1)
+      if (opts?.alpnAsArray && key === 'alpn') params.alpn = [value]
+      else params[key] = value
+    }
+    start = amp + 1
+  }
+}
+
+function splitHostPort(hostPort: string) {
+  if (hostPort.startsWith('[')) {
+    const right = hostPort.indexOf(']')
+    return { server: hostPort.slice(1, right), port: Number(hostPort.slice(right + 2)) }
+  }
+  const sep = hostPort.lastIndexOf(':')
+  return { server: hostPort.slice(0, sep), port: Number(hostPort.slice(sep + 1)) }
+}
+
+function parseName(prefix: string, nameRaw: string, fallback: string) {
+  return nameRaw ? `[${prefix}] ${decodeURIComponent(nameRaw)}` : fallback
+}
+
+function splitBody(body: string) {
+  const hash = body.indexOf('#')
+  const withQuery = hash === -1 ? body : body.slice(0, hash)
+  const nameRaw = hash === -1 ? '' : body.slice(hash + 1)
+  const q = withQuery.indexOf('?')
+  return {
+    authority: q === -1 ? withQuery : withQuery.slice(0, q),
+    query: q === -1 ? '' : withQuery.slice(q + 1),
+    nameRaw
+  }
+}
+
+function parseAuthUrl(raw: string, prefixLen: number) {
+  const { authority, query, nameRaw } = splitBody(raw.slice(prefixLen))
+  const at = authority.lastIndexOf('@')
+  const auth = authority.slice(0, at)
+  const { server, port } = splitHostPort(authority.slice(at + 1))
+  return { auth, server, port, query, nameRaw }
 }
 
 function parseSS(url: string, idx: number) {
-  // ss://base64 or ss://[method]:[password]@[server]:[port]#name
-  // 1. ss://base64@[server]:[port]#name
-  const atMatch = url.match(/^ss:\/\/(.+)@(.+):(\d+)(?:#(.+))?/);
-  if (atMatch) {
-    // ss://base64@[server]:[port]#name
-    const [_, base64, server, port, nameRaw] = atMatch;
-    let decoded = '';
-    try { decoded = Buffer.from(base64.split('?')[0], 'base64').toString(); } catch {}
-    const m = decoded.match(/([^:]+):(.+)/);
-    if (m) {
-      const [, cipher, password] = m;
-      const name = nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`;
-      return {
-        name,
-        server: server.replace(/^\[|\]$/g, ''),
-        port: Number(port),
-        type: 'ss',
-        cipher,
-        password
-      };
+  const { authority, nameRaw } = splitBody(url.slice(SS_PREFIX.length))
+  const at = authority.lastIndexOf('@')
+
+  let cipher = ''
+  let password = ''
+  let server = ''
+  let port = 0
+
+  if (at !== -1) {
+    const auth = authority.slice(0, at)
+    ;({ server, port } = splitHostPort(authority.slice(at + 1)))
+    if (auth.includes(':')) {
+      const sep = auth.indexOf(':')
+      cipher = auth.slice(0, sep)
+      password = auth.slice(sep + 1)
+    } else {
+      const decoded = Buffer.from(auth, 'base64').toString()
+      const sep = decoded.indexOf(':')
+      cipher = decoded.slice(0, sep)
+      password = decoded.slice(sep + 1)
     }
+  } else {
+    const decoded = Buffer.from(authority, 'base64').toString()
+    const authSep = decoded.lastIndexOf('@')
+    const methodAndPass = decoded.slice(0, authSep)
+    ;({ server, port } = splitHostPort(decoded.slice(authSep + 1)))
+    const sep = methodAndPass.indexOf(':')
+    cipher = methodAndPass.slice(0, sep)
+    password = methodAndPass.slice(sep + 1)
   }
-  // 2. ss://base64?plugin=xxx#name
-  const base64Match = url.match(/^ss:\/\/(.+?)(?:#(.+))?$/);
-  if (base64Match) {
-    const [_, base64, nameRaw] = base64Match;
-    let decoded = '';
-    try { decoded = Buffer.from(base64.split('?')[0], 'base64').toString(); } catch {}
-    const m = decoded.match(/([^:]+):(.+)@([^:]+):(\d+)/);
-    if (m) {
-      const [, cipher, password, server, port] = m;
-      const name = nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`;
-      return {
-        name,
-        server: server.replace(/^\[|\]$/g, ''),
-        port: Number(port),
-        type: 'ss',
-        cipher,
-        password
-      };
-    }
-  }
-  // 3. ss://[method]:[password]@[server]:[port]#name
-  const match = url.match(/^ss:\/\/(.+):(.+)@(.+):(\d+)(?:#(.+))?/);
-  if (match) {
-    const [_, cipher, password, server, port, nameRaw] = match;
-    const name = nameRaw ? `[SS] ${decodeURIComponent(nameRaw)}` : `ss-${idx}`;
-    return {
-      name,
-      server: server.replace(/^\[|\]$/g, ''),
-      port: Number(port),
-      type: 'ss',
-      cipher,
-      password
-    };
-  }
-  return null;
+
+  return { name: parseName('SS', nameRaw, `ss-${idx}`), server, port, type: 'ss', cipher, password }
 }
 
 function parseVMESS(url: string, idx: number) {
-  // vmess://base64json
-  const match = url.match(/^vmess:\/\/(.+)/);
-  if (!match) return null;
-  let decoded = '';
-  try { decoded = Buffer.from(match[1], 'base64').toString(); } catch {}
-  let obj: any = {};
-  try { obj = JSON.parse(decoded); } catch {}
-  const name = obj.ps ? `[Vmess] ${obj.ps}` : `vmess-${idx}`;
+  const decoded = Buffer.from(url.slice(VMESS_PREFIX.length), 'base64').toString()
+  const obj = JSON.parse(decoded) as Record<string, any>
+
   return {
-    name,
-    server: obj.add || '',
-    port: Number(obj.port) || '',
-    type: 'vmess',
-    uuid: obj.id || '',
-    alterId: obj.aid || 0,
-    cipher: obj.cipher || 'auto',
-    tls: obj.tls === 'tls' || obj.tls === true,
+    'name': obj.ps ? `[Vmess] ${obj.ps}` : `vmess-${idx}`,
+    'server': obj.add,
+    'port': Number(obj.port),
+    'type': 'vmess',
+    'uuid': obj.id,
+    'alterId': obj.aid || 0,
+    'cipher': obj.cipher || 'auto',
+    'tls': obj.tls === 'tls' || obj.tls === true,
     'skip-cert-verify': true,
-    network: obj.net || 'tcp',
-    'ws-opts': {
-      path: obj.path || '',
-      headers: { Host: obj.host || '' }
-    }
-  };
+    'network': obj.net || 'tcp',
+    'ws-opts': { path: obj.path || '', headers: { Host: obj.host || '' } }
+  }
 }
 
 function parseHysteria2(url: string, idx: number) {
-  // hysteria2://password@server:port?sni=xxx&alpn=xxx#name
-  const match = url.match(/^hysteria2:\/\/(.+)@(.+):(\d+)(?:\?([^#]+))?(?:#(.+))?/);
-  if (!match) return null;
-  const [_, password, server, port, query, nameRaw] = match;
-  const params = {} as any;
-  if (query) {
-    query.split('&').forEach(kv => {
-      const [k, v] = kv.split('=');
-      if (k === 'alpn') params.alpn = [v];
-      else params[k] = v;
-    });
-  }
-  const name = nameRaw ? `[Hysteria2] ${decodeURIComponent(nameRaw)}` : `hysteria2-${idx}`;
-  return {
-    name,
-    server,
-    port: Number(port),
-    type: 'hysteria2',
-    password,
+  const {
     auth: password,
+    server,
+    port,
+    query,
+    nameRaw
+  } = parseAuthUrl(url, HYSTERIA2_PREFIX.length)
+  const params: Record<string, any> = {}
+  if (query) parseQuery(query, params, { alpnAsArray: true })
+
+  return {
+    'name': parseName('Hysteria2', nameRaw, `hysteria2-${idx}`),
+    server,
+    port,
+    'type': 'hysteria2',
+    password,
+    'auth': password,
     'skip-cert-verify': true,
     ...params
-  };
+  }
 }
 
 function parseVLESS(url: string, idx: number) {
-  // vless://uuid@server:port?params#name
-  const match = url.match(/^vless:\/\/(.+)@(.+):(\d+)(?:\?([^#]+))?(?:#(.+))?/);
-  if (!match) return null;
-  const [_, uuid, server, port, query, nameRaw] = match;
-  const params: Record<string, string> = {};
-  if (query) {
-    query.split('&').forEach(kv => {
-      const [k, v] = kv.split('=');
-      // 忽略type参数，防止xhttp污染type字段
-      if (k !== 'type') params[k] = v;
-    });
-  }
-  const name = nameRaw ? `[VLESS] ${decodeURIComponent(nameRaw)}` : `vless-${idx}`;
+  const { auth: uuid, server, port, query, nameRaw } = parseAuthUrl(url, VLESS_PREFIX.length)
+  const params: Record<string, string> = {}
+  if (query) parseQuery(query, params, { skipType: true })
+
   return {
-    name,
+    'name': parseName('VLESS', nameRaw, `vless-${idx}`),
     server,
-    port: Number(port),
-    type: 'vless', // 强制为vless
+    port,
+    'type': 'vless',
     uuid,
     'skip-cert-verify': true,
     ...params
-  };
+  }
 }
 
 function parseTROJAN(url: string, idx: number) {
-  // trojan://password@server:port?params#name
-  const match = url.match(/^trojan:\/\/(.+)@(.+):(\d+)(?:\?([^#]+))?(?:#(.+))?/);
-  if (!match) return null;
-  const [_, password, server, port, query, nameRaw] = match;
-  const params: Record<string, string> = {};
-  if (query) {
-    query.split('&').forEach(kv => {
-      const [k, v] = kv.split('=');
-      params[k] = v;
-    });
-  }
-  const name = nameRaw ? `[Trojan] ${decodeURIComponent(nameRaw)}` : `trojan-${idx}`;
+  const { auth: password, server, port, query, nameRaw } = parseAuthUrl(url, TROJAN_PREFIX.length)
+  const params: Record<string, string> = {}
+  if (query) parseQuery(query, params)
+
   return {
-    name,
+    'name': parseName('Trojan', nameRaw, `trojan-${idx}`),
     server,
-    port: Number(port),
-    type: 'trojan',
+    port,
+    'type': 'trojan',
     password,
     'skip-cert-verify': true,
     ...params
-  };
+  }
 }
 
 function parseProxy(line: string, idx: number) {
-  if (line.startsWith('ss://')) return parseSS(line, idx);
-  if (line.startsWith('vmess://')) return parseVMESS(line, idx);
-  if (line.startsWith('hysteria2://')) return parseHysteria2(line, idx);
-  if (line.startsWith('vless://')) return parseVLESS(line, idx);
-  if (line.startsWith('trojan://')) return parseTROJAN(line, idx);
-  return null;
-}
+  const sep = line.indexOf('://')
+  if (sep === -1) return null
 
-function genProxiesArr(subs: string[]): any[] {
-  return subs.map((line, idx) => parseProxy(line, idx)).filter(Boolean);
+  try {
+    switch (line.slice(0, sep)) {
+      case 'ss':
+        return parseSS(line, idx)
+      case 'vmess':
+        return parseVMESS(line, idx)
+      case 'hysteria2':
+        return parseHysteria2(line, idx)
+      case 'vless':
+        return parseVLESS(line, idx)
+      case 'trojan':
+        return parseTROJAN(line, idx)
+      default:
+        return null
+    }
+  } catch {
+    return null
+  }
 }
 
 const mihomo: Generator = async (subs, dir) => {
-  const outPath = path.join(dir, 'sub.yaml');
-  let template = getTemplateYaml();
-  const doc = yaml.load(template) as any;
-  const proxiesArr = genProxiesArr(subs);
-  doc.proxies = proxiesArr;
-  const proxyNames = proxiesArr.map(p => p.name);
+  const base = await templateDocPromise
+  const doc = { ...base } as any
+
+  const proxies: any[] = []
+  const proxyNames: string[] = []
+  for (let i = 0; i < subs.length; i += 1) {
+    const proxy = parseProxy(subs[i], i)
+    if (!proxy) continue
+    proxies.push(proxy)
+    proxyNames.push(proxy.name)
+  }
+
+  doc.proxies = proxies
   doc['proxy-groups'] = [
-    {
-      name: '节点选择',
-      type: 'select',
-      proxies: [...proxyNames, '自动选择', 'DIRECT']
-    },
+    { name: '节点选择', type: 'select', proxies: proxyNames.concat('自动选择', 'DIRECT') },
     {
       name: '自动选择',
       type: 'url-test',
@@ -205,8 +224,8 @@ const mihomo: Generator = async (subs, dir) => {
       tolerance: 50,
       proxies: proxyNames
     }
-  ];
-  fs.writeFileSync(outPath, yaml.dump(doc, { lineWidth: 120 }), 'utf8');
+  ]
+  await Bun.write(path.join(dir, 'sub.yaml'), Bun.YAML.stringify(doc))
 }
 
-export default mihomo;
+export default mihomo

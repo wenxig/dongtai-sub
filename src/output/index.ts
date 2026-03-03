@@ -1,8 +1,10 @@
 import type { Generator } from '../model'
 
-import v2ray from './v2ray'
-import clash from './clash'
-import mihomo from './mihomo'
+const writers = await Promise.all(
+  (await Array.fromAsync(new Bun.Glob('./*.ts').scan({ cwd: import.meta.dirname })))
+    .filter(path => !path.includes('index'))
+    .map(v => import(v).then<Generator>(v => v.default))
+)
 
 export const outputResults: Generator = (subs, dir) =>
-  Promise.all([v2ray(subs, dir), clash(subs, dir), mihomo(subs, dir)])
+  Promise.all(writers.map(writer => writer(subs, dir)))
