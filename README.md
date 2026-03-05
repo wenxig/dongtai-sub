@@ -20,7 +20,7 @@ https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.tx
 将下面这段url粘贴进订阅
 
 ```sh
-https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/clash.txt
+https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.yaml
 ```
 
 ## 诶 🤓 :point_up:
