@@ -1,9 +1,11 @@
 # Dongtai Sub
 
-## 功能
+## ✨程序特点
 
-- 自动抓取[Alvin9999-newpac/fanqiang(原Alvin9999/new-pac)](https://github.com/Alvin9999-newpac/fanqiang)的v2ray和ss节点
-- 保存
+- ⚡高自动: 自动抓取[Alvin9999-newpac/fanqiang(原Alvin9999/new-pac)](https://github.com/Alvin9999-newpac/fanqiang)的v2ray和ss节点
+- 🚀高性能: 工作流运行时间平均 ***10s***，其中程序运行仅 ***1s***
+- 📚高扩展: 在对应的文件夹下创建文件，系统会自动识别并整合功能，解决重复问题
+- ✔️高人工: **匠心程序员手作代码**，ai含量极低
 
 ## 使用方法
 
