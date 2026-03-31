@@ -35,4 +35,4 @@ https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.ya
 
 [![free-nodes的节点抓取](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=free-nodes-sub&theme=transparent)](https://github.com/wenxig/free-nodes-sub)
 
-更新于 2026-03-31 23:04:17
+更新于 2026-04-01 01:00:21
