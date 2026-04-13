@@ -29,10 +29,10 @@ https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.ya
 
 有了好的节点，该看什么内容呢？当然是**Delta Comic**了，包罗万象的内容，人性化的界面，你的夜晚好助手
 
-[![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=delta-comic&theme=transparent)](https://github.com/wenxig/delta-comic)
+[![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=delta-comic&repo=delta-comic&theme=transparent)](https://github.com/delta-comic/delta-comic)
 
 ## 其他节点
 
-[![free-nodes的节点抓取](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=free-nodes-sub&theme=transparent)](https://github.com/wenxig/free-nodes-sub)
+[![free-nodes的节点抓取](https://wenxig-grs.vercel.app/api/pin/?username=delta-comic&repo=free-nodes-sub&theme=transparent)](https://github.com/delta-comic/free-nodes-sub)
 
 更新于 2026-04-13 22:50:56
