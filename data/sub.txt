@@ -1,6 +1,6 @@
 vless://4e9a2de3-4193-49a9-b7fb-b5fff8479904@[2001:bc8:32d7:302::10]:60277?encryption=none&security=reality&sni=www.lovelive-anime.jp&fp=chrome&pbk=o2mKhGNfc7h3XaxZgmmAWHnWs5FdwciNPoSFMOh2wng&sid=cd0bbb9f&type=xhttp&path=%2FYplI82oo#VLESS-xhttp-Reality-Vision
 vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogInZtZXNzLXdzLWlwdjYiLA0KICAiYWRkIjogIjJhMDI6NmVhMDpkMzJmOjpmOGZlOjM0OWIiLA0KICAicG9ydCI6ICIyNDIwMiIsDQogICJpZCI6ICJiMjBhNzA0Mi03MGZmLTQzNzYtYTc5Zi1iNjhmOWVkYjc1MTkiLA0KICAiYWlkIjogIjAiLA0KICAic2N5IjogImF1dG8iLA0KICAibmV0IjogIndzIiwNCiAgInR5cGUiOiAibm9uZSIsDQogICJob3N0IjogIiIsDQogICJwYXRoIjogIi9naXRodWIuY29tL0FsdmluOTk5OS1uZXdwYWMvZmFucWlhbmciLA0KICAidGxzIjogIiIsDQogICJzbmkiOiAiIiwNCiAgImFscG4iOiAiIiwNCiAgImZwIjogIiINCn0=
-hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@[2001:bc8:32d7:302::10]:43115?sni=www.microsoft.com&insecure=1#hysteria2%E8%8A%82%E7%82%B9
+hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@62.210.10.107:64772?sni=bing.com&insecure=1#hysteria2-ipv4
 ssr://c3NyMi43NjI5ODgueHl6OjMzMzM2OmF1dGhfY2hhaW5fYTpjaGFjaGEyMC1pZXRmOnRsczEuMl90aWNrZXRfYXV0aDpaRzl1WjNSaGFYZGhibWN1WTI5dC8_b2Jmc3BhcmFtPSZyZW1hcmtzPVUxTlM2SXFDNTRLNQ
 ss://YWVzLTI1Ni1nY206Z2l0aHViLmNvbS9BbHZpbjk5OTktbmV3cGFjL2ZhbnFpYW5n@[2a02:6ea0:d32f::f8fe:349b]:11111#SS%E8%8A%82%E7%82%B9-ipv6
-hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@[2001:bc8:32d7:302::10]:43115?sni=www.microsoft.com&insecure=1#hysteria2%E8%8A%82%E7%82%B9
+hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@62.210.26.173:64772?sni=bing.com&insecure=1#hysteria2-ipv4-2
