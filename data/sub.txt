@@ -3,4 +3,4 @@ vmess://ew0KICAidiI6ICIyIiwNCiAgInBzIjogInZtZXNzLXdzLWlwdjYiLA0KICAiYWRkIjogIjIw
 anytls://github.com%2FAlvin9999-newpac%2Ffanqiang@62.210.7.112:55770?security=tls&sni=bing.com&allowInsecure=1&type=tcp#github-anytls
 ssr://c3NyMi43NjI5ODgueHl6OjMzMzM2OmF1dGhfY2hhaW5fYTpjaGFjaGEyMC1pZXRmOnRsczEuMl90aWNrZXRfYXV0aDpaRzl1WjNSaGFYZGhibWN1WTI5dC8_b2Jmc3BhcmFtPSZyZW1hcmtzPVUxTlM2SXFDNTRLNQ
 ss://YWVzLTI1Ni1nY206Z2l0aHViLmNvbS9BbHZpbjk5OTktbmV3cGFjL2ZhbnFpYW5n@[2001:bc8:32d7:17b::100]:22222#SS-IPv6
-hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@hy2.313186.xyz:18066?sni=hy2.313186.xyz&insecure=0#hysteria2-ipv4
+anytls://github.com%2FAlvin9999-newpac%2Ffanqiang@62.210.7.112:55770?security=tls&sni=bing.com&allowInsecure=1&type=tcp#github-anytls
