@@ -2,7 +2,7 @@ import { JSDOM } from 'jsdom'
 
 import type { SourceGetter } from '../model'
 
-const _: SourceGetter = async () => {
+export default (async () => {
   const source =
     'https://github.com/Alvin9999-newpac/fanqiang/wiki/v2ray%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7'
   const res = await Bun.fetch(source, { method: 'GET' })
@@ -12,6 +12,4 @@ const _: SourceGetter = async () => {
   return Array.from(
     document.querySelectorAll<HTMLDivElement>('.highlight-source-shell, .highlight-source-txt')
   ).map(v => v.textContent)
-}
-
-export default _
+}) as SourceGetter

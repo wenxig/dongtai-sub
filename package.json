@@ -1,6 +1,7 @@
 {
   "name": "dongtai-sub",
   "version": "1.0.0",
+  "description": "歌外梦中人",
   "scripts": {
     "begin": "bun --bun ./src/index.ts",
     "dev": "bun begin"
@@ -8,13 +9,13 @@
   "type": "module",
   "main": "./src/index.ts",
   "devDependencies": {
-    "@types/bun": "^1.3.9",
-    "@types/jsdom": "^28.0.0",
-    "@typescript/native-preview": "^7.0.0-dev.20260303.1",
-    "oxfmt": "^0.36.0",
+    "@types/bun": "^1.4.2",
+    "@types/jsdom": "^30.0.0",
+    "typescript": "^7.0.2",
+    "oxfmt": "^0.71.0",
     "oxlint": "^1.51.0"
   },
   "dependencies": {
-    "jsdom": "^28.0.0"
+    "jsdom": "^30.1.2"
   }
 }
