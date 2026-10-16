@@ -207,7 +207,9 @@ const mihomo: Generator = async (subs, dir) => {
   const proxies: any[] = []
   const proxyNames: string[] = []
   for (let i = 0; i < subs.length; i += 1) {
-    const proxy = parseProxy(subs[i], i)
+    const line = subs[i]
+    if (line === undefined) continue
+    const proxy = parseProxy(line, i)
     if (!proxy) continue
     proxies.push(proxy)
     proxyNames.push(proxy.name)

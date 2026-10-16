@@ -1,28 +1,34 @@
 {
   "compilerOptions": {
-    "composite": true,
+    // Environment setup & latest features
+    "lib": [
+      "ESNext"
+    ],
     "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "skipLibCheck": true,
-    /* Bundler mode */
+    "module": "Preserve",
+    "moduleDetection": "force",
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "types": [
+      "bun"
+    ],
+    // Bundler mode
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "noEmit": true,
-    /* Linting */
+    // Best practices
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "noImplicitReturns": false,
-    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "noImplicitThis": true,
-    "types": ["bun"]
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noPropertyAccessFromIndexSignature": false,
   },
-  "include": ["./*", "./**/*"]
+  "include": [
+    "src"
+  ]
 }

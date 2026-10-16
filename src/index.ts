@@ -1,5 +1,5 @@
 import { mkdir } from 'fs/promises'
-import path from 'path'
+import path from 'node:path'
 
 import { outputResults } from './output'
 import { getSubscribeUrls } from './sources'

@@ -17,6 +17,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: wiki-fetch
+  cancel-in-progress: true
+
 jobs:
   fetch-wiki:
     runs-on: ubuntu-latest
@@ -26,35 +30,49 @@ jobs:
         with:
           fetch-depth: 1
           persist-credentials: true
+          sparse-checkout: |
+            README.md
+            clash_template.yaml
+            data
+            src
+            package.json
 
       - name: Bun
         uses: oven-sh/setup-bun@v2
-
-      - name: Install dependencies
-        run: bun install --production
+        with:
+          bun-version: 1.4.3
 
       - name: Fetch and extract Wiki pages
         timeout-minutes: 1
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: bun begin
+        run: bun run begin
 
-      # 新增：更新 README 时间戳并清理旧日志
-      - name: Update README Timestamp
+      - name: Check subscription changes
+        id: changes
+        shell: bash
         run: |
-          # 设置时区为东八区（北京时间）
+          if git diff --quiet -- data/sub.txt data/sub.yaml; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update README Timestamp
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
           export TZ='Asia/Shanghai'
-          CURRENT_TIME=$(date "+%Y-%m-%d %H:%M:%S")
+          current_time=$(date "+%Y-%m-%d %H:%M:%S")
 
           sed -i '/更新于/d' README.md
-          echo -e "更新于 $CURRENT_TIME" >> README.md
+          printf '更新于 %s\n' "$current_time" >> README.md
 
       - name: Commit & Push generated files
-        # 只要不是bot递归触发都允许推送
-        if: ${{ github.actor != 'github-actions[bot]' }}
+        if: steps.changes.outputs.changed == 'true' && github.actor != 'github-actions[bot]'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add .
+          git add README.md data/sub.txt data/sub.yaml
           git commit -m "chore: wiki update & readme timestamp [skip ci]"
           git push

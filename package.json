@@ -4,18 +4,15 @@
   "description": "歌外梦中人",
   "scripts": {
     "begin": "bun --bun ./src/index.ts",
-    "dev": "bun begin"
+    "bd": "bun build --compile src/index.ts --outfile dist/app"
   },
   "type": "module",
   "main": "./src/index.ts",
   "devDependencies": {
     "@types/bun": "^1.4.2",
-    "@types/jsdom": "^30.0.0",
     "typescript": "^7.0.2",
-    "oxfmt": "^0.71.0",
-    "oxlint": "^1.51.0"
+    "oxfmt": "^0.73.0",
+    "oxlint": "^1.88.0"
   },
-  "dependencies": {
-    "jsdom": "^30.1.2"
-  }
+  "dependencies": {}
 }

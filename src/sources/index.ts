@@ -1,10 +1,9 @@
 import type { SourceGetter } from '../model'
 
-const getters = await Promise.all(
-  (await Array.fromAsync(new Bun.Glob('./*.ts').scan({ cwd: import.meta.dirname })))
-    .filter(path => !path.includes('index'))
-    .map(path => import(path).then<SourceGetter>(v => v.default))
-)
+import getSS from './ss'
+import getV2ray from './v2ray'
+
+const getters: SourceGetter[] = [getSS, getV2ray]
 
 export const getSubscribeUrls: SourceGetter = () =>
-  Promise.all(getters.map(getter => getter())).then(v => v.flat())
+  Promise.all(getters.map(getter => getter())).then(results => results.flat())
