@@ -1,0 +1,55 @@
+name: Build Binary
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'build.ts'
+      - 'package.json'
+      - 'bun.lock'
+      - '.github/workflows/build-binary.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-binary
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+          persist-credentials: true
+          sparse-checkout: |
+            build.ts
+            src
+
+      - name: Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.3
+
+      - name: Compile Linux binary
+        run: bun run build.ts
+
+      - name: Commit binary
+        shell: bash
+        run: |
+          git add bin/dongtai-sub
+          if git diff --cached --quiet; then
+            echo 'Binary is unchanged.'
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git commit -m 'chore: update compiled binary [skip ci]'
+          git push

@@ -4,13 +4,13 @@ on:
   schedule:
     - cron: '0 */1 * * *'
 
-  # 用户 push 触发，排除脚本写入的 data 目录
-  push:
+  workflow_run:
+    workflows:
+      - Build Binary
+    types:
+      - completed
     branches:
       - main
-    paths-ignore:
-      - 'data/**'
-      - 'README.md'
 
   workflow_dispatch:
 
@@ -23,6 +23,7 @@ concurrency:
 
 jobs:
   fetch-wiki:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -32,21 +33,14 @@ jobs:
           persist-credentials: true
           sparse-checkout: |
             README.md
-            clash_template.yaml
+            bin
             data
-            src
-            package.json
-
-      - name: Bun
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.4.3
 
       - name: Fetch and extract Wiki pages
         timeout-minutes: 1
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: bun run begin
+        run: ./bin/dongtai-sub
 
       - name: Check subscription changes
         id: changes
@@ -69,7 +63,7 @@ jobs:
           printf '更新于 %s\n' "$current_time" >> README.md
 
       - name: Commit & Push generated files
-        if: steps.changes.outputs.changed == 'true' && github.actor != 'github-actions[bot]'
+        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

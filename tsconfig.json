@@ -29,6 +29,7 @@
     "noPropertyAccessFromIndexSignature": false,
   },
   "include": [
-    "src"
+    "src",
+    "build.ts"
   ]
 }

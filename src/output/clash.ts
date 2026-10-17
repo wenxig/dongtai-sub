@@ -1,0 +1,58 @@
+import path from 'node:path'
+
+import type { Generator } from '../model'
+
+const repository = process.env.GITHUB_REPOSITORY ?? 'wenxig/dongtai-sub'
+const subscriptionUrl = `https://raw.githubusercontent.com/${repository}/main/data/sub.txt`
+
+const clash: Generator = async (_subs, dir) => {
+  const config = {
+    'port': 7890,
+    'allow-lan': true,
+    'mode': 'rule',
+    'log-level': 'info',
+    'unified-delay': true,
+    'global-client-fingerprint': 'chrome',
+    'dns': {
+      'enable': true,
+      'listen': ':53',
+      'ipv6': true,
+      'enhanced-mode': 'fake-ip',
+      'fake-ip-range': '198.18.0.1/16',
+      'default-nameserver': ['223.5.5.5', '8.8.8.8'],
+      'nameserver': ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query'],
+      'fallback': ['https://1.0.0.1/dns-query', 'tls://dns.google'],
+      'fallback-filter': { 'geoip': true, 'geoip-code': 'CN', 'ipcidr': ['240.0.0.0/4'] }
+    },
+    'proxy-providers': {
+      nodes: {
+        'type': 'http',
+        'url': subscriptionUrl,
+        'interval': 3600,
+        'health-check': { enable: true, url: 'http://www.gstatic.com/generate_204', interval: 300 }
+      }
+    },
+    'proxy-groups': [
+      { name: '节点选择', type: 'select', use: ['nodes'], proxies: ['自动选择', 'DIRECT'] },
+      {
+        name: '自动选择',
+        type: 'url-test',
+        use: ['nodes'],
+        url: 'http://www.gstatic.com/generate_204',
+        interval: 300,
+        tolerance: 50
+      }
+    ],
+    'rules': [
+      'DOMAIN,clash.razord.top,DIRECT',
+      'DOMAIN,yacd.haishan.me,DIRECT',
+      'GEOIP,LAN,DIRECT',
+      'GEOIP,CN,DIRECT',
+      'MATCH,节点选择'
+    ]
+  }
+
+  await Bun.write(path.join(dir, 'sub.yaml'), Bun.YAML.stringify(config))
+}
+
+export default clash

@@ -4,7 +4,7 @@
   "description": "歌外梦中人",
   "scripts": {
     "begin": "bun --bun ./src/index.ts",
-    "bd": "bun build --compile src/index.ts --outfile dist/app"
+    "build": "bun run build.ts"
   },
   "type": "module",
   "main": "./src/index.ts",
