@@ -4,7 +4,7 @@
 
 ## 自动拉取正常运行中✅
 
-没变化是因为节点健康不需要更新
+[![CI 最近运行](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwenxig%2Fdongtai-sub%2Fmain%2Fdata%2Fci-status.json&style=flat-square)](https://github.com/marketplace/actions/ci-badges)
 
 ## ✨程序特点
 

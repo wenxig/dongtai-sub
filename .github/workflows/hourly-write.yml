@@ -43,31 +43,21 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: ./bin/dongtai-sub
 
-      - name: Check subscription changes
-        id: changes
-        shell: bash
-        run: |
-          if git diff --quiet -- data/sub.txt data/sub.yaml; then
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "changed=true" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Update README Timestamp
-        if: steps.changes.outputs.changed == 'true'
+      - name: Update CI run timestamp
         shell: bash
         run: |
           export TZ='Asia/Shanghai'
-          current_time=$(date "+%Y-%m-%d %H:%M:%S")
-
-          sed -i '/更新于/d' README.md
-          printf '更新于 %s\n' "$current_time" >> README.md
+          current_time=$(date '+%Y-%m-%d %H:%M:%S CST')
+          printf '{"schemaVersion":1,"label":"CI 最近运行","message":"%s","color":"brightgreen"}\n' "$current_time" > data/ci-status.json
 
       - name: Commit & Push generated files
-        if: steps.changes.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md data/sub.txt data/sub.yaml
-          git commit -m "chore: wiki update & readme timestamp [skip ci]"
+          git add data/ci-status.json data/sub.txt data/sub.yaml
+          if git diff --cached --quiet; then
+            echo 'No generated changes to commit.'
+            exit 0
+          fi
+          git commit -m "chore: update CI status and subscriptions [skip ci]"
           git push
