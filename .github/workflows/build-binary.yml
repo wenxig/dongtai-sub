@@ -43,7 +43,7 @@ jobs:
       - name: Commit binary
         shell: bash
         run: |
-          git add bin/dongtai-sub
+          git add --sparse bin/dongtai-sub
           if git diff --cached --quiet; then
             echo 'Binary is unchanged.'
             exit 0
