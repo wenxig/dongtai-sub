@@ -37,6 +37,9 @@ jobs:
         with:
           bun-version: 1.4.3
 
+      - name: Install Git LFS filters
+        run: git lfs install --local
+
       - name: Compile Linux binary
         run: bun run build.ts
 
@@ -52,4 +55,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git commit -m 'chore: update compiled binary [skip ci]'
+          git lfs push origin HEAD
           git push
