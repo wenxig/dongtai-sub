@@ -1,18 +1,15 @@
 {
   "name": "dongtai-sub",
-  "version": "1.0.0",
-  "description": "歌外梦中人",
   "scripts": {
     "begin": "bun --bun ./src/index.ts",
     "build": "bun run build.ts"
   },
   "type": "module",
+  "bin": "./bin/dongtai-sub",
   "main": "./src/index.ts",
   "devDependencies": {
-    "@types/bun": "^1.4.2",
-    "typescript": "^7.0.2",
-    "oxfmt": "^0.73.0",
-    "oxlint": "^1.88.0"
+    "@types/bun": "^1.4.4",
+    "typescript": "^7.0.2"
   },
-  "dependencies": {}
+  "packageManager": "bun@1.4.4"
 }
