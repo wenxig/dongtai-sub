@@ -4,7 +4,7 @@
 
 ## 自动拉取正常运行中✅
 
-![CI](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwenxig%2Fdongtai-sub%2Frefs%2Fheads%2Fmain%2Fdata%2Fci-status.json)
+![CI](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwenxig%2Fdongtai-sub%2Frefs%2Fheads%2Fmain%2Fdata%2Fci-status.json&cacheSeconds=300)
 
 没变化是因为节点健康不需要更新
 
@@ -38,8 +38,8 @@ https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.ya
 
 有了好的节点，该看什么内容呢？当然是**Delta Comic**了，包罗万象的内容，人性化的界面，你的夜晚好助手
 
-[![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=delta-comic&repo=delta-comic&theme=transparent)](https://github.com/delta-comic/delta-comic)
+[![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=delta-comic&repo=delta-comic&theme=transparent&cacheSeconds=300)](https://github.com/delta-comic/delta-comic)
 
 ## 其他节点
 
-[![free-nodes的节点抓取](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=free-nodes-sub&theme=transparent)](https://github.com/wenxig/free-nodes-sub)
+[![free-nodes的节点抓取](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=free-nodes-sub&theme=transparent&cacheSeconds=300)](https://github.com/wenxig/free-nodes-sub)
