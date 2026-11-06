@@ -33,13 +33,3 @@ https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.tx
 ```sh
 https://raw.githubusercontent.com/wenxig/dongtai-sub/refs/heads/main/data/sub.yaml
 ```
-
-## 诶 🤓 :point_up:
-
-有了好的节点，该看什么内容呢？当然是**Delta Comic**了，包罗万象的内容，人性化的界面，你的夜晚好助手
-
-[![Readme Card](https://wenxig-grs.vercel.app/api/pin/?username=delta-comic&repo=delta-comic&theme=transparent&cacheSeconds=300)](https://github.com/delta-comic/delta-comic)
-
-## 其他节点
-
-[![free-nodes的节点抓取](https://wenxig-grs.vercel.app/api/pin/?username=wenxig&repo=free-nodes-sub&theme=transparent&cacheSeconds=300)](https://github.com/wenxig/free-nodes-sub)
