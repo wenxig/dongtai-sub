@@ -2,7 +2,7 @@
 
 > *——这长城之外，和心中的呓语*
 
-## 自动拉取正常运行中✅
+## ~~自动拉取正常运行中✅~~ Alvin9999的号又挂了，等新号
 
 ![CI](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fwenxig%2Fdongtai-sub%2Frefs%2Fheads%2Fmain%2Fdata%2Fci-status.json&cacheSeconds=300)
 
